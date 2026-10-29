@@ -1,0 +1,127 @@
+/* 视觉设计的几套皮肤（原型，用完即扔）。给「视觉设计」那张票用。
+   布局和交互都是方案 H，皮肤只改长什么样：配色、背景、侧栏、按钮、卡片、新局面板、牌身、牌背、选中和提示的标记。
+   ?skin=classic|night|paper|candy 切换，浮条上的皮肤下拉框或键盘 ↑ ↓ 也能切。
+   classic 就是现在的 H（Front.svg 牌身，带模糊滤镜）；另外三套的牌身用 CSS 画，只贴牌面图案，不用 Front.svg。 */
+
+/* ================= 夜雀：深色雀庄，墨绿桌面、金色点缀，牌身带翠绿牌背厚边 ================= */
+body.skin-night { --ink: #e9e3d3; --muted: #9c9583; --gold: #e2b55a; --panel: #16191d; --card: #20242a; }
+.skin-night .vD .b-boardhost { background: radial-gradient(ellipse at 50% 40%, #173a30 0%, #0c1f1a 70%, #08130f 100%); }
+.skin-night .b-rail { background: var(--panel); border-left: 1px solid #2a2f36; color: var(--ink); }
+.skin-night .b-stat { background: transparent; border: 1px solid #2c323a; border-radius: 6px; }
+.skin-night .b-stat small { color: var(--muted); letter-spacing: .08em; }
+.skin-night .b-stat b { color: var(--gold); font-weight: 600; }
+.skin-night .b-diff { color: var(--muted); }
+.skin-night .b-diff span { color: var(--ink); }
+.skin-night .b-btn { background: #23282f; color: var(--ink); box-shadow: inset 0 0 0 1px #343b44; border-radius: 8px; font-weight: 500; }
+.skin-night .b-btn.on { background: #5b2fa6; box-shadow: inset 0 0 0 1px #8d5fe0; color: #fff; }
+.skin-night .b-card { background: var(--card); color: var(--ink); border-left-color: #3a414a; }
+.skin-night .b-card.tone-warn { background: #2e2716; border-color: #e2b55a; }
+.skin-night .b-card.tone-bad { background: #331a1a; border-color: #e0584f; }
+.skin-night .b-card.tone-good, .skin-night .b-card.tone-choose { background: #16291f; border-color: #4fbf82; }
+.skin-night .b-card.tone-laizi { background: #261a38; border-color: #9a6cf0; }
+.skin-night .b-card.tone-idle { color: var(--muted); }
+.skin-night .b-acts button { background: var(--gold); color: #1a1608; }
+.skin-night .b-new { border-color: #3a414a; color: var(--ink); }
+.skin-night .b-rules { color: var(--muted); }
+.skin-night .tile:not(.gone) {
+  background-image: var(--face); background-size: 82% 80%; background-position: 50% 42%;
+  background-color: #f3eee1;
+  border-radius: calc(var(--tw) * .12);
+  box-shadow: 0 calc(var(--tw) * .08) 0 #1f7a57, 0 calc(var(--tw) * .1) calc(var(--tw) * .12) rgba(0, 0, 0, .55);
+}
+.skin-night .tile.gone { background: rgba(255, 255, 255, .035); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .06); border-radius: calc(var(--tw) * .12); }
+.skin-night .vB .tile.sel { box-shadow: 0 0 0 2px var(--gold), 0 calc(var(--tw) * .08) 0 #1f7a57, 0 0 calc(var(--tw) * .4) rgba(226, 181, 90, .55); transform: translateY(-3px); }
+.skin-night .vB .tile.hint::before { color: var(--gold); text-shadow: 0 0 6px rgba(226, 181, 90, .8); }
+.skin-night .vB .b-line { stroke: var(--gold); }
+.skin-night .vB .board.laizi-mode { outline-color: #9a6cf0; }
+.skin-night .vM .tile.gone.tg::after { background: rgba(226, 181, 90, .14); border-color: var(--gold); color: var(--gold); }
+.skin-night .ic-laizi { filter: brightness(.95); }
+.skin-night .ng-mask { background: rgba(0, 0, 0, .65); }
+.skin-night .ng-panel { background: #1b1f24; color: var(--ink); box-shadow: 0 0 0 1px #343b44, 0 20px 60px rgba(0, 0, 0, .7); }
+.skin-night .ng-tiers button { background: #23282f; border-color: #343b44; color: var(--ink); }
+.skin-night .ng-tiers button.on { background: var(--gold); border-color: var(--gold); color: #1a1608; }
+.skin-night .ng-ticks, .skin-night .ng-marks i { color: var(--muted); }
+.skin-night .ng-warn { color: #ff8a80; }
+.skin-night .ng-go { background: var(--gold); color: #1a1608; }
+
+/* ================= 和纸：浅色极简，米白纸面、墨字、朱红点缀，平面牌、几乎没有阴影 ================= */
+body.skin-paper { --ink: #26221d; --muted: #8b8274; --red: #c8372d; --paper: #f4efe4; --line: #d9d0bf; }
+.skin-paper .vB { font-family: "Noto Serif SC", "Source Han Serif SC", "Songti SC", "STSong", serif; }
+.skin-paper .vD .b-boardhost { background: var(--paper); background-image: radial-gradient(rgba(0, 0, 0, .035) 1px, transparent 1px); background-size: 6px 6px; }
+.skin-paper .b-rail { background: var(--paper); border-left: 1px solid var(--line); color: var(--ink); gap: 14px; }
+.skin-paper .b-stats { gap: 0; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); }
+.skin-paper .b-stat { background: transparent; border-radius: 0; padding: 6px 4px; }
+.skin-paper .b-stat small { color: var(--muted); }
+.skin-paper .b-stat b { font-weight: 400; font-size: 22px; }
+.skin-paper .b-diff { color: var(--muted); }
+.skin-paper .b-diff span { color: var(--red); font-weight: 700; }
+.skin-paper .b-btn { background: transparent; box-shadow: none; border: 1px solid var(--ink); border-radius: 2px; font-weight: 400; height: 46px; }
+.skin-paper .b-btn:active { background: var(--ink); color: var(--paper); }
+.skin-paper .b-btn.on { background: var(--red); border-color: var(--red); color: #fff; box-shadow: none; }
+.skin-paper .b-card { background: transparent; border-left: 2px solid var(--line); border-radius: 0; padding: 4px 0 4px 10px; }
+.skin-paper .b-card.tone-warn, .skin-paper .b-card.tone-bad { background: transparent; border-color: var(--red); color: var(--red); }
+.skin-paper .b-card.tone-good, .skin-paper .b-card.tone-choose { background: transparent; border-color: var(--ink); }
+.skin-paper .b-card.tone-laizi { background: transparent; border-color: var(--red); }
+.skin-paper .b-acts button { background: transparent; color: var(--ink); border: 1px solid var(--ink); border-radius: 2px; }
+.skin-paper .b-new { border: 0; border-bottom: 1px solid var(--ink); border-radius: 0; }
+.skin-paper .tile:not(.gone) {
+  background-image: var(--face); background-size: 84% 84%; background-position: center;
+  background-color: #fffdf8; border-radius: calc(var(--tw) * .06);
+  box-shadow: 0 0 0 1px #cfc5b2;
+}
+.skin-paper .tile.gone { background: transparent; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .07); border-radius: calc(var(--tw) * .06); }
+.skin-paper .vD .board.has-sel .tile:not(.same):not(.gone) { opacity: .25; }
+.skin-paper .vB .tile.sel { box-shadow: 0 0 0 2px var(--red); transform: none; }
+.skin-paper .vB .tile.hint::before { color: var(--red); text-shadow: none; }
+.skin-paper .vB .b-line { stroke: var(--red); stroke-width: calc(var(--tw) * .06); }
+.skin-paper .vB .board.laizi-mode { outline: 1px solid var(--red); outline-offset: 8px; }
+.skin-paper .vM .tile.gone.tg::after { background: transparent; border: 1px solid var(--red); color: var(--red); font-weight: 400; }
+.skin-paper .float-group.lifted .tile { box-shadow: 0 0 0 1px #cfc5b2, 0 4px 10px rgba(0, 0, 0, .15); }
+.skin-paper .ng-mask { background: rgba(244, 239, 228, .8); }
+.skin-paper .ng-panel { background: var(--paper); border: 1px solid var(--ink); border-radius: 2px; box-shadow: none; font-family: "Noto Serif SC", "Songti SC", serif; }
+.skin-paper .ng-tiers button { background: transparent; border-color: var(--ink); border-radius: 2px; }
+.skin-paper .ng-tiers button.on { background: var(--ink); color: var(--paper); }
+.skin-paper .ng-range { accent-color: var(--red); }
+.skin-paper .ng-warn { color: var(--red); }
+.skin-paper .ng-go { background: var(--red); border-radius: 2px; font-weight: 400; letter-spacing: .3em; }
+
+/* ================= 糖果：明亮活泼，青紫渐变背景、圆滚滚的大按钮、橙色牌背厚边 ================= */
+body.skin-candy { --ink: #2a1f4d; --pop: #ff7a2f; --mint: #26d7a4; --grape: #7b4dff; }
+.skin-candy .vB { font-family: "PingFang SC", "HarmonyOS Sans SC", "Microsoft YaHei", sans-serif; }
+.skin-candy .vD .b-boardhost { background: linear-gradient(140deg, #3dd6d0 0%, #5a8dff 55%, #8b5cff 100%); }
+.skin-candy .b-rail { background: #fff7ec; border-left: 0; color: var(--ink); box-shadow: -6px 0 0 rgba(42, 31, 77, .12); }
+.skin-candy .b-stat { background: #ffe9cf; border-radius: 14px; }
+.skin-candy .b-stat:nth-child(2) { background: #d9f7ec; }
+.skin-candy .b-stat:nth-child(3) { background: #eee4ff; }
+.skin-candy .b-stat:nth-child(4) { background: #ffe0ea; }
+.skin-candy .b-stat small { color: #8a7aa8; font-weight: 700; }
+.skin-candy .b-stat b { font-weight: 900; color: var(--ink); }
+.skin-candy .b-diff span { color: var(--grape); font-weight: 900; }
+.skin-candy .b-btn { border-radius: 999px; background: #fff; color: var(--ink); box-shadow: 0 4px 0 #d8c8b2; font-weight: 800; }
+.skin-candy .b-btn:active { transform: translateY(3px); box-shadow: 0 1px 0 #d8c8b2; }
+.skin-candy .b-hint { background: #fff3a6; box-shadow: 0 4px 0 #e0c44a; }
+.skin-candy .b-btn.on { background: var(--grape); color: #fff; box-shadow: 0 4px 0 #4b28b0; }
+.skin-candy .b-card { border-radius: 16px; border-left: 0; background: #fff; box-shadow: 0 3px 0 #eadcc8; }
+.skin-candy .b-card.tone-warn { background: #fff1d6; }
+.skin-candy .b-card.tone-bad { background: #ffe1e1; }
+.skin-candy .b-card.tone-good, .skin-candy .b-card.tone-choose { background: #dcfaee; }
+.skin-candy .b-card.tone-laizi { background: #efe6ff; }
+.skin-candy .b-acts button { border-radius: 999px; background: var(--ink); font-weight: 700; }
+.skin-candy .b-new { border: 0; border-radius: 999px; background: #ffe9cf; font-weight: 800; }
+.skin-candy .tile:not(.gone) {
+  background-image: var(--face); background-size: 80% 78%; background-position: 50% 40%;
+  background-color: #fffaf2; border-radius: calc(var(--tw) * .2);
+  box-shadow: 0 calc(var(--tw) * .1) 0 var(--pop), 0 calc(var(--tw) * .14) calc(var(--tw) * .1) rgba(42, 31, 77, .35);
+}
+.skin-candy .tile.gone { background: linear-gradient(160deg, #ff9a55, #f26a1b); border-radius: calc(var(--tw) * .2); opacity: .35; }
+.skin-candy .vB .tile.sel { box-shadow: 0 0 0 3px #fff, 0 0 0 6px var(--grape), 0 calc(var(--tw) * .1) 0 var(--pop); transform: translateY(-4px) scale(1.06); }
+.skin-candy .vB .tile.hint::before { color: #ffe14a; text-shadow: 0 2px 0 var(--ink); }
+.skin-candy .vB .b-line { stroke: #fff; stroke-width: calc(var(--tw) * .14); }
+.skin-candy .vB .board.laizi-mode { outline: 4px dashed #fff; }
+.skin-candy .vM .tile.gone.tg::after { background: rgba(255, 255, 255, .85); border: 0; color: var(--grape); border-radius: 50%; }
+.skin-candy .ng-mask { background: rgba(42, 31, 77, .55); }
+.skin-candy .ng-panel { border-radius: 24px; background: #fff7ec; box-shadow: 0 8px 0 rgba(42, 31, 77, .25); }
+.skin-candy .ng-tiers button { border: 0; border-radius: 999px; background: #fff; box-shadow: 0 3px 0 #e2d3bd; font-weight: 800; }
+.skin-candy .ng-tiers button.on { background: var(--grape); color: #fff; box-shadow: 0 3px 0 #4b28b0; }
+.skin-candy .ng-range { accent-color: var(--grape); }
+.skin-candy .ng-go { border-radius: 999px; background: var(--mint); color: var(--ink); font-weight: 900; box-shadow: 0 4px 0 #14a07a; }

@@ -1,0 +1,49 @@
+{
+  "exp": "safeCheck",
+  "count": 3000,
+  "opts": {
+    "spread": 1
+  },
+  "wallSec": 4.47,
+  "flip10": {
+    "n": 3000,
+    "phase1": {
+      "solvable": 2986,
+      "timeout": 14
+    },
+    "recheck": {}
+  },
+  "flip25": {
+    "n": 3000,
+    "phase1": {
+      "solvable": 2986,
+      "timeout": 14
+    },
+    "recheck": {}
+  },
+  "flip40": {
+    "n": 3000,
+    "phase1": {
+      "solvable": 2976,
+      "exhausted": 4,
+      "timeout": 20
+    },
+    "recheck": {
+      "timeout": 2,
+      "solvable": 2
+    }
+  },
+  "flip55": {
+    "n": 3000,
+    "phase1": {
+      "solvable": 2888,
+      "timeout": 104,
+      "exhausted": 8
+    },
+    "recheck": {
+      "unsolvable": 3,
+      "solvable": 3,
+      "timeout": 2
+    }
+  }
+}

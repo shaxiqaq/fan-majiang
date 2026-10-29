@@ -1,0 +1,80 @@
+{
+  "exp": "solveRandomMove",
+  "count": 10000,
+  "opts": {},
+  "wallSec": 16.28,
+  "adj": {
+    "mean": 5.49,
+    "p10": 3,
+    "p50": 5,
+    "p90": 8,
+    "p99": 11,
+    "max": 15
+  },
+  "solve": {
+    "2000": {
+      "result": {
+        "solvable": 8821,
+        "timeout": 900,
+        "unsolvable": 279
+      },
+      "likelyUnsolvable": 1,
+      "ms": {
+        "mean": 3.33,
+        "p50": 2.21,
+        "p99": 15.76,
+        "max": 148.69,
+        "p90": 6.87
+      },
+      "firstIsMove": 0
+    },
+    "10000": {
+      "result": {
+        "solvable": 9544,
+        "unsolvable": 284,
+        "timeout": 172
+      },
+      "likelyUnsolvable": 0,
+      "ms": {
+        "mean": 4.36,
+        "p50": 2.13,
+        "p99": 29.33,
+        "max": 148.43,
+        "p90": 9.11
+      },
+      "firstIsMove": 0
+    },
+    "50000": {
+      "result": {
+        "solvable": 9704,
+        "unsolvable": 284,
+        "timeout": 12
+      },
+      "likelyUnsolvable": 0,
+      "ms": {
+        "mean": 5.81,
+        "p50": 2.12,
+        "p99": 43.56,
+        "max": 307.15,
+        "p90": 15.43
+      },
+      "firstIsMove": 0
+    },
+    "200000": {
+      "result": {
+        "solvable": 9715,
+        "unsolvable": 284,
+        "timeout": 1
+      },
+      "likelyUnsolvable": 0,
+      "ms": {
+        "mean": 7.66,
+        "p50": 2.14,
+        "p99": 96.18,
+        "max": 706.18,
+        "p90": 15.48
+      },
+      "firstIsMove": 0
+    }
+  }
+}

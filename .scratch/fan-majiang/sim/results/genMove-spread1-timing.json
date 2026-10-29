@@ -1,0 +1,438 @@
+{
+  "exp": "genMove",
+  "count": 500,
+  "opts": {
+    "spread": 1,
+    "workers": 1,
+    "tag": "timing"
+  },
+  "wallSec": 10.1,
+  "adj": {
+    "mean": 5.15,
+    "p10": 2,
+    "p50": 5,
+    "p90": 9,
+    "p99": 12,
+    "max": 12
+  },
+  "solve0": {
+    "2000": {
+      "result": {
+        "solvable": 499,
+        "timeout": 1
+      },
+      "likelyUnsolvable": 0,
+      "ms": {
+        "mean": 1.34,
+        "p50": 1.23,
+        "p99": 2.7,
+        "max": 5.02,
+        "p90": 1.9
+      },
+      "firstIsMove": 0
+    },
+    "10000": {
+      "result": {
+        "solvable": 499,
+        "timeout": 1
+      },
+      "likelyUnsolvable": 0,
+      "ms": {
+        "mean": 1.37,
+        "p50": 1.21,
+        "p99": 4.93,
+        "max": 12.1,
+        "p90": 1.81
+      },
+      "firstIsMove": 0
+    },
+    "50000": {
+      "result": {
+        "solvable": 500
+      },
+      "likelyUnsolvable": 0,
+      "ms": {
+        "mean": 1.51,
+        "p50": 1.2,
+        "p99": 11.01,
+        "max": 38.53,
+        "p90": 1.72
+      },
+      "firstIsMove": 0
+    },
+    "200000": {
+      "result": {
+        "solvable": 500
+      },
+      "likelyUnsolvable": 0,
+      "ms": {
+        "mean": 1.54,
+        "p50": 1.2,
+        "p99": 16.93,
+        "max": 23.06,
+        "p90": 1.76
+      },
+      "firstIsMove": 0
+    }
+  },
+  "random": {
+    "deadRate": 0.42,
+    "firstDeadLeft": {
+      "mean": 29.36,
+      "p10": 4,
+      "p50": 26,
+      "p90": 58,
+      "p99": 92,
+      "max": 116
+    },
+    "rescues": {
+      "mean": 1.29,
+      "p10": 0,
+      "p50": 0,
+      "p90": 4,
+      "p99": 10,
+      "max": 13
+    },
+    "rescuesCdf": {
+      "<=0": 0.58,
+      "<=1": 0.73,
+      "<=2": 0.81,
+      "<=3": 0.87,
+      "<=5": 0.93,
+      "<=10": 0.99
+    },
+    "movesUsed": {
+      "mean": 31.34,
+      "p10": 26,
+      "p50": 31,
+      "p90": 36,
+      "p99": 40,
+      "max": 42
+    }
+  },
+  "steady": {
+    "deadRate": 0.15,
+    "firstDeadLeft": {
+      "mean": 14.16,
+      "p10": 4,
+      "p50": 8,
+      "p90": 32,
+      "p99": 74,
+      "max": 74
+    },
+    "rescues": {
+      "mean": 0.2,
+      "p10": 0,
+      "p50": 0,
+      "p90": 1,
+      "p99": 3,
+      "max": 5
+    },
+    "rescuesCdf": {
+      "<=0": 0.85,
+      "<=1": 0.97,
+      "<=2": 0.98,
+      "<=3": 0.99,
+      "<=5": 1,
+      "<=10": 1
+    },
+    "movesUsed": {
+      "mean": 16.01,
+      "p10": 12,
+      "p50": 16,
+      "p90": 21,
+      "p99": 25,
+      "max": 28
+    }
+  },
+  "steadyMid": {
+    "flip10": {
+      "n": 500,
+      "solve": {
+        "2000": {
+          "result": {
+            "solvable": 498,
+            "timeout": 2
+          },
+          "likelyUnsolvable": 0,
+          "ms": {
+            "mean": 1.04,
+            "p50": 0.97,
+            "p99": 2.34,
+            "max": 5.04,
+            "p90": 1.47
+          },
+          "firstIsMove": 182
+        },
+        "10000": {
+          "result": {
+            "solvable": 500
+          },
+          "likelyUnsolvable": 0,
+          "ms": {
+            "mean": 1.04,
+            "p50": 0.95,
+            "p99": 3.29,
+            "max": 4.16,
+            "p90": 1.4
+          },
+          "firstIsMove": 190
+        },
+        "50000": {
+          "result": {
+            "solvable": 500
+          },
+          "likelyUnsolvable": 0,
+          "ms": {
+            "mean": 1.12,
+            "p50": 0.93,
+            "p99": 11.1,
+            "max": 12.86,
+            "p90": 1.42
+          },
+          "firstIsMove": 190
+        },
+        "200000": {
+          "result": {
+            "solvable": 500
+          },
+          "likelyUnsolvable": 0,
+          "ms": {
+            "mean": 1.37,
+            "p50": 0.94,
+            "p99": 23.43,
+            "max": 44.12,
+            "p90": 1.44
+          },
+          "firstIsMove": 191
+        }
+      },
+      "options": {
+        "flips": 12.33,
+        "moves": 19.11,
+        "multi": 3.81,
+        "noFlipButMove": 0
+      }
+    },
+    "flip25": {
+      "n": 500,
+      "solve": {
+        "2000": {
+          "result": {
+            "solvable": 495,
+            "timeout": 5
+          },
+          "likelyUnsolvable": 0,
+          "ms": {
+            "mean": 0.54,
+            "p50": 0.45,
+            "p99": 3.1,
+            "max": 4.41,
+            "p90": 0.73
+          },
+          "firstIsMove": 125
+        },
+        "10000": {
+          "result": {
+            "solvable": 498,
+            "timeout": 2
+          },
+          "likelyUnsolvable": 0,
+          "ms": {
+            "mean": 0.56,
+            "p50": 0.43,
+            "p99": 3.54,
+            "max": 12.73,
+            "p90": 0.7
+          },
+          "firstIsMove": 131
+        },
+        "50000": {
+          "result": {
+            "solvable": 499,
+            "timeout": 1
+          },
+          "likelyUnsolvable": 0,
+          "ms": {
+            "mean": 0.73,
+            "p50": 0.41,
+            "p99": 12.19,
+            "max": 56.69,
+            "p90": 0.71
+          },
+          "firstIsMove": 132
+        },
+        "200000": {
+          "result": {
+            "solvable": 500
+          },
+          "likelyUnsolvable": 0,
+          "ms": {
+            "mean": 1.04,
+            "p50": 0.4,
+            "p99": 36.08,
+            "max": 74.92,
+            "p90": 0.69
+          },
+          "firstIsMove": 133
+        }
+      },
+      "options": {
+        "flips": 14.38,
+        "moves": 25.8,
+        "multi": 3.49,
+        "noFlipButMove": 0
+      }
+    },
+    "flip40": {
+      "n": 500,
+      "solve": {
+        "2000": {
+          "result": {
+            "solvable": 492,
+            "unsolvable": 1,
+            "timeout": 7
+          },
+          "likelyUnsolvable": 0,
+          "ms": {
+            "mean": 0.2,
+            "p50": 0.12,
+            "p99": 2.95,
+            "max": 3.64,
+            "p90": 0.26
+          },
+          "firstIsMove": 98
+        },
+        "10000": {
+          "result": {
+            "solvable": 495,
+            "unsolvable": 1,
+            "timeout": 4
+          },
+          "likelyUnsolvable": 0,
+          "ms": {
+            "mean": 0.3,
+            "p50": 0.1,
+            "p99": 10.45,
+            "max": 14.38,
+            "p90": 0.24
+          },
+          "firstIsMove": 98
+        },
+        "50000": {
+          "result": {
+            "solvable": 497,
+            "unsolvable": 1,
+            "timeout": 2
+          },
+          "likelyUnsolvable": 1,
+          "ms": {
+            "mean": 0.59,
+            "p50": 0.09,
+            "p99": 15.59,
+            "max": 66.94,
+            "p90": 0.22
+          },
+          "firstIsMove": 99
+        },
+        "200000": {
+          "result": {
+            "solvable": 497,
+            "unsolvable": 1,
+            "timeout": 2
+          },
+          "likelyUnsolvable": 1,
+          "ms": {
+            "mean": 1.46,
+            "p50": 0.09,
+            "p99": 34.34,
+            "max": 259.83,
+            "p90": 0.21
+          },
+          "firstIsMove": 101
+        }
+      },
+      "options": {
+        "flips": 12.38,
+        "moves": 21.13,
+        "multi": 2.21,
+        "noFlipButMove": 0
+      }
+    },
+    "flip55": {
+      "n": 500,
+      "solve": {
+        "2000": {
+          "result": {
+            "solvable": 475,
+            "unsolvable": 21,
+            "timeout": 4
+          },
+          "likelyUnsolvable": 3,
+          "ms": {
+            "mean": 0.06,
+            "p50": 0.01,
+            "p99": 1.27,
+            "max": 2.53,
+            "p90": 0.05
+          },
+          "firstIsMove": 42
+        },
+        "10000": {
+          "result": {
+            "solvable": 476,
+            "unsolvable": 22,
+            "timeout": 2
+          },
+          "likelyUnsolvable": 2,
+          "ms": {
+            "mean": 0.1,
+            "p50": 0.01,
+            "p99": 1.17,
+            "max": 9.87,
+            "p90": 0.04
+          },
+          "firstIsMove": 43
+        },
+        "50000": {
+          "result": {
+            "solvable": 477,
+            "unsolvable": 22,
+            "timeout": 1
+          },
+          "likelyUnsolvable": 1,
+          "ms": {
+            "mean": 0.2,
+            "p50": 0.01,
+            "p99": 1.29,
+            "max": 41.83,
+            "p90": 0.04
+          },
+          "firstIsMove": 43
+        },
+        "200000": {
+          "result": {
+            "solvable": 477,
+            "unsolvable": 22,
+            "timeout": 1
+          },
+          "likelyUnsolvable": 1,
+          "ms": {
+            "mean": 0.43,
+            "p50": 0.01,
+            "p99": 1.09,
+            "max": 156.99,
+            "p90": 0.04
+          },
+          "firstIsMove": 43
+        }
+      },
+      "options": {
+        "flips": 7.44,
+        "moves": 10.73,
+        "multi": 0.88,
+        "noFlipButMove": 4
+      }
+    }
+  }
+}
