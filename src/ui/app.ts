@@ -27,12 +27,12 @@ type Drag = {
   stopsPos?: number[]; stopsNeg?: number[]; fl?: Float; refuse?: boolean; off?: number;
 };
 
-// 当前局面所有能配上的移动，按「方向:串头:格数」查配法
+// 当前局面所有能配上的移动，按「方向:串头:格数」查配法。单张牌不能移动，只看两张以上的牌串
 let moveIdx: { v: number; map: Map<string, Pair[]> } = { v: -1, map: new Map() };
 function pairsFor(dir: number, head: number, dist: number): Pair[] {
   if (moveIdx.v !== game.version) {
     const map = new Map<string, Pair[]>();
-    for (const m of listMoves(game.board)) map.set(`${m.dirIndex}:${m.head}:${m.dist}`, m.pairs);
+    for (const m of listMoves(game.board, { single: false })) map.set(`${m.dirIndex}:${m.head}:${m.dist}`, m.pairs);
     moveIdx = { v: game.version, map };
   }
   return moveIdx.map.get(`${dir}:${head}:${dist}`) ?? [];
@@ -246,6 +246,12 @@ export function mountApp(app: HTMLElement, { startNote }: { startNote?: { text: 
     }
     D.pitch = scr(D.pos!.dirIndex).pitch;
     D.cells = D.pos!.cells;
+    if (D.cells.length < 2) {
+      D.dead = true;
+      board.animate(D.cells, 'anim-shake', 300);
+      note.say('单张牌不能移动，点两张能连上的同牌翻掉', 'warn');
+      return;
+    }
     if (!D.pos!.gap && !D.neg!.gap) {
       D.dead = true;
       board.animate(D.cells, 'anim-shake', 300);
@@ -352,6 +358,7 @@ export function mountApp(app: HTMLElement, { startNote }: { startNote?: { text: 
   function render() {
     const names = ['sel', 'same', 'hint', 'tg', 'cand', 'tg-r', 'tg-l', 'tg-u', 'tg-d'];
     const deco: Deco = Object.fromEntries(names.map((n) => [n, new Set<number>()]));
+    for (const i of sel) deco.sel.add(i);
     const cls: string[] = [];
     if (sel.length) {
       cls.push('has-sel');

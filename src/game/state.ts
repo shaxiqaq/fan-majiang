@@ -310,7 +310,7 @@ export function replay(actions: Action[]): boolean {
       game.history.push({ act: a, ...snap() });
       game.board[a.a] = game.board[a.b] = EMPTY;
     } else {
-      const m = listMoves(game.board).find((x) => x.dirIndex === a.dir && x.head === a.head && x.dist === a.dist);
+      const m = listMoves(game.board, { single: false }).find((x) => x.dirIndex === a.dir && x.head === a.head && x.dist === a.dist);
       if (!m || m.len !== a.len || !m.pairs.some((p) => p.from === a.from && p.to === a.to && p.partner === a.partner)) return false;
       const before = snap();
       shiftRaw(moveOf(a));
