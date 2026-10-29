@@ -1,0 +1,5 @@
+node_modules/
+dist/
+# 原型、模拟和调研放在 prototype-archive 分支，不进 main（spec.md 第 11 节）
+.scratch/
+.claude/
