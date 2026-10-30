@@ -2,7 +2,7 @@
 // 棋盘用小图画：'.' 是空位，小写字母是牌种（a=0, b=1, ...），没画到的格都是填充牌 '#'（牌种 33，
 // 和图里的牌都不同，不会被配上）。填充牌自己能做的移动和这里无关，所以每个用例只看指定的牌串。
 import { describe, it, expect } from 'vitest';
-import { COLS, N, EMPTY, Game, rng, randInt, DOWN, RIGHT, STEP } from './core';
+import { COLS, N, EMPTY, Game, rng, randInt, DOWN, RIGHT, STEP, connect } from './core';
 import { listMoves, collectMoves, doMove, undoMove, hasMove } from './move';
 import { genForward } from './generate';
 
@@ -64,26 +64,26 @@ describe('配不上就不算', () => {
   });
 });
 
-// 3. 身后隔着空位的牌不跟着走
+// 3. 身后隔着空位的牌不跟着走：b、c 一起往右 2 格，c 落到下面那张 c 的正上方
 describe('身后隔空位', () => {
-  const b = grid(['a.bc..d', '#####c']);
-  it('牌串只有 c、b 两张', () => {
+  const b = grid(['a.cb..d', '####c']);
+  it('牌串只有 b、c 两张', () => {
     const m = listMoves(b).find((x) => x.head === at(0, 3) && x.dir === 'right' && x.dist === 2);
     expect(m?.cells).toEqual([at(0, 3), at(0, 2)]);
   });
   it('a 留在原处', () => {
     const g = new Game(b);
-    doMove(g, RIGHT, at(0, 3), 2, 2, at(0, 5), at(1, 5));
-    expect(show(g.board, 2, 7)).toBe('a...b.d/#####.#');
+    doMove(g, RIGHT, at(0, 3), 2, 2, at(0, 4), at(1, 4));
+    expect(show(g.board, 2, 7)).toBe('a....bd/####.##');
   });
 });
 
-// 4. 可以停在中间某格：前面有 3 个空位，只有走 1 格时 b 落到下面那张 b 的正上方
-it('停在中间：只有走 1 格能配上', () => {
-  const b = grid(['ab...c', '##b']);
+// 4. 可以停在中间某格：前面有 4 个空位，只有走 3 格时被带着走的 b 落到下面那张 b 的正上方
+it('停在中间：只有走 3 格能配上', () => {
+  const b = grid(['ba....c', '###b']);
   const ms = movesOf(b, at(0, 1), 'right');
-  expect(Object.keys(ms)).toEqual(['1']);
-  expect(ms[1]).toEqual([[at(0, 1), at(0, 2), at(1, 2)]]);
+  expect(Object.keys(ms)).toEqual(['3']);
+  expect(ms[3]).toEqual([[at(0, 0), at(0, 3), at(1, 3)]]);
 });
 
 // 5. 牌串里两张挨着的同牌不算配上
@@ -92,47 +92,44 @@ describe('串里的同牌', () => {
     const b = grid(['aa....', '######']);
     expect(Object.keys(movesOf(b, at(0, 1), 'right')).length).toBe(0);
   });
-  // 串里有两张 a，外面还有第三张：只能和外面那张配
+  // 串里有两张 a，外面还有第三张：只能和外面那张配。串头那张走 3 格也能对上，但它本来就能拐一次弯连上，不算
   it('只和没动的那张配上', () => {
     const b2 = grid(['aa....', '####a']);
-    expect(movesOf(b2, at(0, 1), 'right')).toEqual({ 3: [[at(0, 1), at(0, 4), at(1, 4)]], 4: [[at(0, 0), at(0, 4), at(1, 4)]] });
+    expect(movesOf(b2, at(0, 1), 'right')).toEqual({ 4: [[at(0, 0), at(0, 4), at(1, 4)]] });
   });
 });
 
-// 6. 一张牌能配好几张：b 走 2 格后，上面、下面各有一张 b，前面挡路的也是 b
+// 6. 一张牌能配好几张：被带着走的 b 走 3 格后，上面、下面各有一张 b
 describe('一张配多张', () => {
-  const b = grid(['###b###', 'ab...b', '###b###']);
+  const b = grid(['###b###', 'bx...', '###b###']);
   const ms = movesOf(b, at(1, 1), 'right');
-  it('走 2 格有三种配法', () => {
-    const partners = (ms[2] || []).map((p) => p[2]).sort((x, y) => x - y);
-    expect(partners).toEqual([at(0, 3), at(1, 5), at(2, 3)].sort((x, y) => x - y));
+  it('走 3 格有两种配法', () => {
+    const partners = (ms[3] || []).map((p) => p[2]).sort((x, y) => x - y);
+    expect(partners).toEqual([at(0, 3), at(2, 3)]);
   });
-  it('走 1、3 格只能配前面挡路的那张', () => {
-    expect(ms[1]).toEqual([[at(1, 1), at(1, 2), at(1, 5)]]);
-    expect(ms[3]).toEqual([[at(1, 1), at(1, 4), at(1, 5)]]);
+  it('别的格数配不上', () => {
+    expect(Object.keys(ms)).toEqual(['3']);
   });
 });
 
-// 7. 竖着走：a、b 一起往下走 2 格，b 落到 (3,0)，右边隔一个空位是 b
+// 7. 竖着走：b、a 一起往下走 3 格，b 落到 (3,0)，右边隔一个空位是 b
 describe('竖着走', () => {
-  const b = grid(['a', 'b', '..', '..b', '#']);
-  it('往下 2 格，b 隔空位和右边的 b 横着对上', () => {
-    expect(movesOf(b, at(1, 0), 'down')[2]).toEqual([[at(1, 0), at(3, 0), at(3, 2)]]);
+  const b = grid(['b', 'a', '..', '..b', '.']);
+  it('往下 3 格，b 隔空位和右边的 b 横着对上', () => {
+    expect(movesOf(b, at(1, 0), 'down')[3]).toEqual([[at(0, 0), at(3, 0), at(3, 2)]]);
   });
-  it('a 跟到 (2,0)，原来两格空出来', () => {
+  it('a 跟到 (4,0)，上面几格空出来', () => {
     const g = new Game(b);
-    doMove(g, DOWN, at(1, 0), 2, 2, at(3, 0), at(3, 2));
-    expect(g.board[at(0, 0)]).toBe(EMPTY);
-    expect(g.board[at(1, 0)]).toBe(EMPTY);
-    expect(g.board[at(2, 0)]).toBe(0);
-    expect(g.board[at(3, 0)]).toBe(EMPTY);
+    doMove(g, DOWN, at(1, 0), 2, 3, at(3, 0), at(3, 2));
+    for (const r of [0, 1, 2, 3]) expect(g.board[at(r, 0)]).toBe(EMPTY);
+    expect(g.board[at(4, 0)]).toBe(0);
   });
 });
 
-// 8. 串尾往后看：腾出来的格加上身后原有的空位，碰到的第一张是同牌，也算配上
-it('串尾往后看：走 1、2 格都能和身后的 a 配上', () => {
-  const b = grid(['a.ab..#']);
-  expect(movesOf(b, at(0, 3), 'right')).toEqual({ 1: [[at(0, 2), at(0, 3), at(0, 0)]], 2: [[at(0, 2), at(0, 4), at(0, 0)]] });
+// 8. 本来就能直接翻的一对不算配上：串头前方挡路的同牌、串尾身后的同牌，中间全是空位，移动前就连得上
+it('串头前方、串尾身后的同牌：本来就能连上，不算配上', () => {
+  expect(Object.keys(movesOf(grid(['a.ab..#']), at(0, 3), 'right')).length).toBe(0);
+  expect(Object.keys(movesOf(grid(['.ab..b#']), at(0, 2), 'right')).length).toBe(0);
 });
 
 // 9. 牌串让出来的格打通了两张没动的同牌：不算这次移动配上（移完可以照常翻）
@@ -141,11 +138,11 @@ it('让出的格打通别的牌：不算配上', () => {
   expect(Object.keys(movesOf(b, at(1, 1), 'right')).length).toBe(0);
 });
 
-// 10. 单张的牌串：规则上允许，listMoves 默认列出；single: false 时跳过；hasMove 只看两张以上的
+// 10. 单张的牌串：挪过去能对上的同牌，移动前一定能拐一次弯连上，所以连默认也不列出
 describe('单张牌串', () => {
   const b = grid(['.a..', '##a#']);
-  it('默认列出', () => {
-    expect(movesOf(b, at(0, 1), 'right')[1]?.length).toBe(1);
+  it('默认也不列', () => {
+    expect(movesOf(b, at(0, 1), 'right')[1]).toBeUndefined();
   });
   it('single: false 时不列', () => {
     expect(listMoves(b, { single: false }).some((m) => m.head === at(0, 1))).toBe(false);
@@ -159,9 +156,10 @@ it('kindKey 区分牌种', () => {
   expect(g1.key()).toBe(g2.key());
 });
 
-// 12. 和暴力实现对照：在随机局面上真的把牌串挪过去，逐对检查不拐弯的连线
+// 12. 和暴力实现对照：在随机局面上真的把牌串挪过去，逐对检查不拐弯的连线，并去掉移动前就能连上的
 function brute(board: Int8Array): Set<string> {
   const set = new Set<string>();
+  const pass = board.map((k) => (k === EMPTY ? 1 : 0));
   for (let head = 0; head < N; head++) {
     if (board[head] === EMPTY) continue;
     for (let dir = 0; dir < 4; dir++) {
@@ -177,7 +175,7 @@ function brute(board: Int8Array): Set<string> {
         for (const c of cells) nb[c + s * dist] = board[c];
         for (const c of cells) {
           const to = c + s * dist;
-          for (let u = 0; u < N; u++) if (!moved.has(u) && nb[u] === nb[to] && straight(nb, to, u)) set.add([dir, head, dist, c, u].join());
+          for (let u = 0; u < N; u++) if (!moved.has(u) && nb[u] === nb[to] && straight(nb, to, u) && !connect(c, u, pass)) set.add([dir, head, dist, c, u].join());
         }
       }
     }
@@ -190,7 +188,7 @@ function straight(b: Int8Array, x: number, y: number): boolean {
   if (cx === cy) { for (let r = Math.min(rx, ry) + 1; r < Math.max(rx, ry); r++) if (b[r * COLS + cx] !== EMPTY) return false; return true; }
   return false;
 }
-it('和暴力实现对照、单张牌串可直接翻、执行再撤回还原', () => {
+it('和暴力实现对照、单张牌串配不上、执行再撤回还原', () => {
   let bad = 0, total = 0, positions = 0, singles = 0, singleBad = 0, undoBad = 0;
   for (let seed = 1; seed <= 60; seed++) {
     const rand = rng(seed);
@@ -201,8 +199,9 @@ it('和暴力实现对照、单张牌串可直接翻、执行再撤回还原', (
       const flat = collectMoves(g.board, []);
       for (let i = 0; i < flat.length; i += 7) {
         fast.add([flat[i], flat[i + 1], flat[i + 3], flat[i + 4], flat[i + 6]].join());
-        // 单张牌串配上的那一对，不移动也能直接连上（求解器因此可以跳过单张的牌串）
-        if (flat[i + 2] === 1) { singles++; if (!g.canFlip(flat[i + 4], flat[i + 6])) singleBad++; }
+        // 配上的那一对移动前一定连不上；单张牌串因此永远配不上
+        if (flat[i + 2] === 1) singles++;
+        if (g.canFlip(flat[i + 4], flat[i + 6])) singleBad++;
         // 执行再撤回，局面原样回来
         const before = Int8Array.from(g.board), key = g.kindKey();
         const rec = doMove(g, flat[i], flat[i + 1], flat[i + 2], flat[i + 3], flat[i + 5], flat[i + 6]);
@@ -221,10 +220,10 @@ it('和暴力实现对照、单张牌串可直接翻、执行再撤回还原', (
       } else break;
     }
   }
-  // 原版跑出来是 3368 个局面、55127 种配法、10631 对单张牌串
-  expect(positions).toBe(3368);
-  expect(total).toBe(55127);
-  expect(singles).toBe(10631);
+  // 局面要够多、配法不能全被排除，这个对照才有意义
+  expect(positions).toBeGreaterThan(3000);
+  expect(total).toBeGreaterThan(10000);
+  expect(singles).toBe(0);
   expect(bad).toBe(0);
   expect(singleBad).toBe(0);
   expect(undoBad).toBe(0);

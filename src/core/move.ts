@@ -4,16 +4,18 @@
 // 紧挨着空位，这一整段就是一个牌串；只能整串走。牌串沿这个方向直走 dist 格（1 到前方连续空位数），
 // 走完以后，串里至少要有一张牌和一张没动的同牌之间是不拐弯的连线（同行或同列、中间全是空位），
 // 并翻掉其中一对；一对都配不上，这次移动不算。
+// 移动前本来就能直接翻掉（最多拐一次弯能连上）的一对，不算配上：移动只用来造出新的连线。
 //
-// 挪完以后要找的"没动的同牌"有三种来源，都不用真的把牌挪过去再看：
-//   1. 串里每张牌落点的垂直方向（左右移动时看上下）：那几格在别的行/列，挪动不影响；
-//   2. 最前面那张往前看：前方空位走完碰到的第一张牌（就是挡住牌串的那张）；
-//   3. 最后面那张往后看：腾出来的格加上原来身后的空位，碰到的第一张牌。
+// 挪完以后要找的"没动的同牌"只剩一种来源：串里每张牌落点的垂直方向（左右移动时看上下），
+// 那几格在别的行/列，挪动不影响，不用真的把牌挪过去再看。
+// 另外两处看上去也能对上，但都被上一条排除了：
+//   - 最前面那张往前看，碰到的第一张牌（挡住牌串的那张）：两张之间全是空位，本来就能连上；
+//   - 最后面那张往后看，碰到的第一张牌：同理，本来就能连上。
 // 串内两张牌永远不算配上：它们都动了，而"没动的同牌"要求另一张没动。
 //
 // 只有一张牌的牌串：挪过去配上，结果和直接翻掉这一对完全一样（路径就是一条最多拐一次弯的连线）。
 // 规则上允许，listMoves 默认列出来；求解器和模拟玩家跳过它们，免得同一个结果算两遍。
-import { ROWS, COLS, N, EMPTY, UP, DOWN, LEFT, RIGHT, STEP, DIR_NAMES } from './core';
+import { ROWS, COLS, N, EMPTY, UP, DOWN, LEFT, RIGHT, STEP, DIR_NAMES, connect } from './core';
 import type { BoardLike, DirName, FlipRecord, Game } from './core';
 
 // 撤回移动用的记录：[dir, head, len, dist, 翻牌记录]
@@ -64,7 +66,7 @@ export function nearest(board: BoardLike, near: Int16Array = new Int16Array(4 * 
 }
 
 const NEAR = new Int16Array(4 * N);
-const OPP = [DOWN, UP, RIGHT, LEFT];
+const PASS = new Uint8Array(N);
 // 垂直于移动方向的两个方向
 const SIDES: readonly (readonly [number, number])[] = [[LEFT, RIGHT], [LEFT, RIGHT], [UP, DOWN], [UP, DOWN]];
 
@@ -75,8 +77,9 @@ const SIDES: readonly (readonly [number, number])[] = [[LEFT, RIGHT], [LEFT, RIG
 // 同一个 (dir, head, dist) 的几种配法挨着推。minLen = 2 时跳过单张的牌串。
 export function collectMoves(board: BoardLike, out: number[], minLen = 1): number[] {
   const near = nearest(board, NEAR);
+  for (let i = 0; i < N; i++) PASS[i] = board[i] === EMPTY ? 1 : 0;
   for (let dir = 0; dir < 4; dir++) {
-    const s = STEP[dir], back = OPP[dir];
+    const s = STEP[dir];
     const [sa, sb] = SIDES[dir];
     const vertical = dir === UP || dir === DOWN;
     const lines = vertical ? COLS : ROWS, along = vertical ? ROWS : COLS;
@@ -89,20 +92,15 @@ export function collectMoves(board: BoardLike, out: number[], minLen = 1): numbe
         let len = 1;
         while (t + len < along && board[cellAt(vertical, line, dir, along, t + len)] !== EMPTY) len++;
         if (t > 0 && len >= minLen) {
-          const rear = head - s * (len - 1);
           const blocker = near[dir * N + head]; // 挡住牌串的那张
-          const behind = near[back * N + rear]; // 串尾身后的第一张
           const gap = blocker < 0 ? t : (blocker - head) / s - 1; // 前方连续空位数
-          const kHead = board[head], kRear = board[rear];
           for (let dist = 1; dist <= gap; dist++) {
             const d = s * dist;
-            if (blocker >= 0 && board[blocker] === kHead) out.push(dir, head, len, dist, head, head + d, blocker);
-            if (behind >= 0 && board[behind] === kRear) out.push(dir, head, len, dist, rear, rear + d, behind);
             for (let i = 0, c = head; i < len; i++, c -= s) {
               const k = board[c], to = c + d;
               const p = near[sa * N + to], q = near[sb * N + to];
-              if (p >= 0 && board[p] === k) out.push(dir, head, len, dist, c, to, p);
-              if (q >= 0 && board[q] === k) out.push(dir, head, len, dist, c, to, q);
+              if (p >= 0 && board[p] === k && !connect(c, p, PASS)) out.push(dir, head, len, dist, c, to, p);
+              if (q >= 0 && board[q] === k && !connect(c, q, PASS)) out.push(dir, head, len, dist, c, to, q);
             }
           }
         }
